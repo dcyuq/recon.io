@@ -1,0 +1,29 @@
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+ 
+# venv
+.venv/
+venv/
+env/
+ 
+# recon output (scan data, reports, target lists)
+output/
+results/
+*.json
+*.html
+targets.txt
+*.log
+ 
+# config / secrets
+config.local.*
+*.env
+.env
+ 
+# editor / os
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
