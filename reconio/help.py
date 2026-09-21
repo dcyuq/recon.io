@@ -20,8 +20,8 @@ _SECTIONS = [
     ("WEB", [
         ("probe", "httpx", True),
         ("fingerprint", "whatweb", False),
-        ("fuzz", "ffuf", False),
-        ("crawl", "katana", False),
+        ("fuzz", "ffuf", True),
+        ("crawl", "katana", True),
     ]),
     ("OSINT", [
         ("whois", "whois", False),
@@ -42,6 +42,16 @@ _CORE = [
     ("help", "show this menu"),
     ("exit", "quit"),
 ]
+
+
+_NOTES = {
+    "WEB": [
+        "fuzz wordlist defaults to /usr/share/wordlists/dirb/common.txt",
+        "override with -w <path>, e.g.:",
+        "  /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt (big)",
+        "  /usr/share/seclists/Discovery/Web-Content/common.txt (needs seclists)",
+    ],
+}
 
 
 def section(key: str):
@@ -119,6 +129,8 @@ def _section_rich(sec) -> None:
             row.append("    ·soon", style="dim yellow")
         c.print(row)
     c.print()
+    for note in _NOTES.get(name, []):
+        c.print(Text(f"     note: {note}" if note == _NOTES.get(name, [""])[0] else f"           {note}", style="dim yellow"))
     c.print(Text("     back", style=f"bold {_ACCENT}"), Text("return to main", style="dim"))
     c.print("-" * _WIDTH, style="dim")
 
@@ -133,6 +145,8 @@ def _section_plain(sec) -> None:
         else:
             print(f"     {cmd:<14}{tool}    ·soon")
     print()
+    for k, note in enumerate(_NOTES.get(name, [])):
+        print(f"     note: {note}" if k == 0 else f"           {note}")
     print("     back           return to main")
     print("-" * _WIDTH)
 
