@@ -18,7 +18,7 @@ _SECTIONS = [
         ("portscan", "masscan/naabu", False),
     ]),
     ("WEB", [
-        ("probe", "httpx", False),
+        ("probe", "httpx", True),
         ("fingerprint", "whatweb", False),
         ("fuzz", "ffuf", False),
         ("crawl", "katana", False),
