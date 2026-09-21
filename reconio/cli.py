@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from reconio import banner, clean, help as menu, target
 from reconio.network import pscan
+from reconio.web import probe
 
 
 def clear() -> None:
@@ -28,6 +29,7 @@ _SECTIONS = {
 
 _HANDLERS = {
     "pscan": pscan.run,
+    "probe": probe.run,
 }
 
 
