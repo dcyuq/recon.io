@@ -36,7 +36,6 @@ GO = {
     "naabu": "github.com/projectdiscovery/naabu/v2/cmd/naabu@latest",
     "httpx": "github.com/projectdiscovery/httpx/cmd/httpx@latest",
     "katana": "github.com/projectdiscovery/katana/cmd/katana@latest",
-    "nuclei": "github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest",
 }
 
 
