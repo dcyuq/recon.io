@@ -15,13 +15,11 @@ def main(argv: list[str] | None = None) -> int:
 
     bootstrap()
 
-    from reconio import banner, help as menu
+    from reconio import cli
     from reconio.network import pscan
 
     if not argv or argv[0] in ("-h", "--help", "help"):
-        banner.render()
-        menu.render()
-        return 0
+        return cli.run()
 
     verb, rest = argv[0], argv[1:]
 
