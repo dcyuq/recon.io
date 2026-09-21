@@ -7,42 +7,136 @@ try:
 except ImportError:
     _RICH = False
 
-_WIDTH = 58
+_console = Console() if _RICH else None
+_WIDTH = 64
 _ACCENT = "#00d7af"
-_INTRO = "type a command to begin · targets must be authorized"
+_INTRO = "select a section or command · targets must be authorized"
 
-_COMMANDS = [
+_SECTIONS = [
+    ("NETWORK", [
+        ("pscan", "nmap", True),
+        ("portscan", "masscan/naabu", False),
+    ]),
+    ("WEB", [
+        ("probe", "httpx", False),
+        ("fingerprint", "whatweb", False),
+        ("fuzz", "ffuf", False),
+        ("crawl", "katana", False),
+    ]),
+    ("OSINT", [
+        ("whois", "whois", False),
+        ("dns", "dnsx", False),
+        ("subs", "subfinder", False),
+        ("crt", "crt.sh", False),
+    ]),
+    ("TLS", [
+        ("tls", "tlsx", False),
+        ("ssl", "testssl.sh", False),
+    ]),
+]
+
+_CORE = [
     ("target <url|ip|host>", "set the current target"),
-    ("pscan <target>", "port + service scan"),
-    ("results", "show / export findings"),
     ("tools", "show installed tools"),
     ("help", "show this menu"),
     ("exit", "quit"),
 ]
 
 
+def section(key: str):
+    for name, cmds in _SECTIONS:
+        if name == key.upper():
+            return name, cmds
+    return None
+
+
 def render() -> None:
-    if _RICH:
-        _render_rich()
-    else:
-        _render_plain()
+    _render_rich() if _RICH else _render_plain()
 
 
 def _render_rich() -> None:
-    console = Console()
-    console.print(Text(_INTRO, style=f"dim {_ACCENT}"))
-    console.print(Text("commands", style=f"bold {_ACCENT}"))
-    for name, desc in _COMMANDS:
+    c = _console
+    c.print(Text(_INTRO, style=f"dim {_ACCENT}"))
+    c.print()
+    for i, (name, cmds) in enumerate(_SECTIONS, 1):
+        line = Text()
+        line.append(f"  {i}. {name:<9}", style=f"bold {_ACCENT}")
+        line.append("- ", style="dim")
+        for j, (cmd, tool, built) in enumerate(cmds):
+            if j:
+                line.append(", ", style="dim")
+            line.append(cmd, style="white" if built else "dim")
+            line.append(f" ({tool})", style="dim")
+            if not built:
+                line.append(" ·soon", style="dim yellow")
+        c.print(line)
+    c.print()
+    c.print(Text("  CORE", style=f"bold {_ACCENT}"))
+    for cmd, desc in _CORE:
         row = Text()
-        row.append(f"  {name:<24}", style=_ACCENT)
-        row.append(desc, style="white")
-        console.print(row)
-    console.print("-" * _WIDTH, style="dim")
+        row.append(f"     {cmd:<22}", style="white")
+        row.append(desc, style="dim")
+        c.print(row)
+    c.print("-" * _WIDTH, style="dim")
 
 
 def _render_plain() -> None:
     print(_INTRO)
-    print("commands")
-    for name, desc in _COMMANDS:
-        print(f"  {name:<24}{desc}")
+    print()
+    for i, (name, cmds) in enumerate(_SECTIONS, 1):
+        parts = []
+        for cmd, tool, built in cmds:
+            tag = "" if built else " ·soon"
+            parts.append(f"{cmd} ({tool}){tag}")
+        print(f"  {i}. {name:<9}- " + ", ".join(parts))
+    print()
+    print("  CORE")
+    for cmd, desc in _CORE:
+        print(f"     {cmd:<22}{desc}")
     print("-" * _WIDTH)
+
+
+def render_section(key: str) -> None:
+    sec = section(key)
+    if not sec:
+        return
+    _section_rich(sec) if _RICH else _section_plain(sec)
+
+
+def _section_rich(sec) -> None:
+    name, cmds = sec
+    c = _console
+    c.print(Text(f"  {name}", style=f"bold {_ACCENT}"))
+    c.print()
+    for cmd, tool, built in cmds:
+        row = Text()
+        row.append(f"     {cmd:<14}", style="white" if built else "dim")
+        row.append(f"{tool}", style="dim")
+        if built:
+            row.append(f"    usage: {cmd} <target> [flags]", style="dim")
+        else:
+            row.append("    ·soon", style="dim yellow")
+        c.print(row)
+    c.print()
+    c.print(Text("     back", style=f"bold {_ACCENT}"), Text("return to main", style="dim"))
+    c.print("-" * _WIDTH, style="dim")
+
+
+def _section_plain(sec) -> None:
+    name, cmds = sec
+    print(f"  {name}")
+    print()
+    for cmd, tool, built in cmds:
+        if built:
+            print(f"     {cmd:<14}{tool}    usage: {cmd} <target> [flags]")
+        else:
+            print(f"     {cmd:<14}{tool}    ·soon")
+    print()
+    print("     back           return to main")
+    print("-" * _WIDTH)
+
+
+if __name__ == "__main__":
+    render()
+    print()
+    render_section("NETWORK")
