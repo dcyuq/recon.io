@@ -30,11 +30,25 @@ FLAGS = {
         ("-follow-redirects", None, "follow redirects"),
         ("-p", "ports", "ports to probe (e.g. 80,443,8080)"),
     ],
+    "crawl": [
+        ("-d", "depth", "crawl depth (default 3)"),
+        ("-jc", None, "crawl javascript files"),
+        ("-kf", None, "known files (robots, sitemap)"),
+    ],
+    "fuzz": [
+        ("-w", "wordlist", "wordlist path (default dirb/common.txt)"),
+        ("-mc", "codes", "match status codes (e.g. 200,301)"),
+        ("-fc", "codes", "filter out status codes (e.g. 404)"),
+        ("-e", "exts", "extensions (e.g. .php,.txt)"),
+        ("-ac", None, "auto-calibrate filtering"),
+    ],
 }
 
 BINARY = {
     "pscan": "nmap",
     "probe": "httpx",
+    "crawl": "katana",
+    "fuzz": "ffuf",
 }
 
 
