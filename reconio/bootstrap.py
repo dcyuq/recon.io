@@ -67,6 +67,22 @@ def has(tool):
     return shutil.which(tool) is not None
 
 
+_VERIFY = {"httpx", "dnsx", "naabu", "subfinder", "katana"}
+
+
+def _pd_ok(tool):
+    if tool not in _VERIFY:
+        return True
+    try:
+        r = subprocess.run(
+            f"{tool} -version", shell=True,
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=6,
+        )
+        return r.returncode == 0
+    except Exception:
+        return False
+
+
 def run(cmd):
     return subprocess.run(
         cmd, shell=True,
@@ -85,7 +101,14 @@ def _pip_missing():
 
 def _tools_missing():
     add_go_bin()
-    return [t for t in list(APT) + list(GEM) + list(GO) if not has(t)]
+    out = []
+    for t in list(APT) + list(GEM):
+        if not has(t):
+            out.append(t)
+    for t in GO:
+        if not has(t) or not _pd_ok(t):
+            out.append(t)
+    return out
 
 
 def ensure_go():
