@@ -105,6 +105,8 @@ def run(tgt: str, raw: list | None = None) -> int:
         return 1
 
     tokens = ([tgt] + list(raw)) if raw else [tgt]
+    show_raw = "-raw" in tokens
+    tokens = [t for t in tokens if t != "-raw"]
     found, selected = _split(tokens)
     tgt = found or tgt
 
@@ -131,6 +133,9 @@ def run(tgt: str, raw: list | None = None) -> int:
     run_cmd = " ".join(parts)
     code, out = runner.run_with_loader(run_cmd, f"probing {tgt}")
 
+    if show_raw:
+        print(out)
+        return code
     rows = _parse(out)
     if not rows and out.strip():
         print(out)
