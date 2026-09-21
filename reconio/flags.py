@@ -33,7 +33,7 @@ FLAGS = {
     "crawl": [
         ("-d", "depth", "crawl depth (default 3)"),
         ("-jc", None, "crawl javascript files"),
-        ("-kf", None, "known files (robots, sitemap)"),
+        ("-kf", "type", "known files: all, robotstxt, sitemapxml"),
     ],
     "fuzz": [
         ("-w", "wordlist", "wordlist path (default dirb/common.txt)"),
