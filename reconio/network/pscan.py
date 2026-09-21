@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 import xml.etree.ElementTree as ET
 
-from reconio import flags, runner
+from reconio import flags, runner, target
 
 try:
     from rich.console import Console
@@ -28,7 +28,7 @@ def _looks_like_target(tok: str) -> bool:
 
 
 def _split(tokens: list[str]):
-    target = None
+    tgt = None
     selected = []
     i = 0
     while i < len(tokens):
@@ -41,10 +41,10 @@ def _split(tokens: list[str]):
             selected.append((tok, None))
             i += 1
             continue
-        if target is None and _looks_like_target(tok):
-            target = tok
+        if tgt is None and target.looks_like_target(target.parse(tok)):
+            tgt = target.parse(tok)
         i += 1
-    return target, selected
+    return tgt, selected
 
 
 def _prompt_flags():
@@ -117,16 +117,16 @@ def _render(target, up, rows):
             print(f"  {port:<7}{proto:<7}{name:<16}{ver or '-'}")
 
 
-def run(target: str, raw: list[str] | None = None) -> int:
+def run(tgt: str, raw: list[str] | None = None) -> int:
     if not runner.available(BIN):
         print(f"{BIN} not found — install it first")
         return 1
 
-    tokens = ([target] + list(raw)) if raw else [target]
+    tokens = ([tgt] + list(raw)) if raw else [tgt]
     found, selected = _split(tokens)
-    target = found or target
+    tgt = found or target.parse(tgt)
 
-    if not _looks_like_target(target):
+    if not target.looks_like_target(tgt):
         print(f"  no valid target found in: {' '.join(tokens)}")
         return 1
 
@@ -138,13 +138,13 @@ def run(target: str, raw: list[str] | None = None) -> int:
         if d not in have:
             selected.append((d, None))
 
-    cmd = flags.preview(VERB, target, selected, binary=BIN)
-    xml_cmd = cmd.replace(f" {target}", f" -oX - {target}", 1)
-    code, out = runner.run_with_loader(xml_cmd, f"scanning {target}")
+    cmd = flags.preview(VERB, tgt, selected, binary=BIN)
+    xml_cmd = cmd.replace(f" {tgt}", f" -oX - {tgt}", 1)
+    code, out = runner.run_with_loader(xml_cmd, f"scanning {tgt}")
 
     up, rows = _parse(out)
     if not rows and "<?xml" not in out:
         print(out)
         return code
-    _render(target, up, rows)
+    _render(tgt, up, rows)
     return code
