@@ -34,7 +34,7 @@ def _split(tokens):
             selected.append((tok, None))
             i += 1
             continue
-        if tgt is None and target.looks_like_target(tok):
+        if tgt is None and target.looks_like_target(target.parse(tok)):
             tgt = tok
         i += 1
     return tgt, selected
@@ -108,7 +108,7 @@ def run(tgt: str, raw: list | None = None) -> int:
     found, selected = _split(tokens)
     tgt = found or tgt
 
-    if not target.looks_like_target(tgt):
+    if not target.looks_like_target(target.parse(tgt)):
         print(f"  no valid target found in: {' '.join(tokens)}")
         return 1
 
