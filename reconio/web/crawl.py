@@ -16,7 +16,7 @@ _ACCENT = "#00d7af"
 VERB = "crawl"
 BIN = flags.BINARY[VERB]
 
-_VALUE_FLAGS = {"-d", "-c", "-timeout"}
+_VALUE_FLAGS = {"-d", "-c", "-timeout", "-kf"}
 _DEFAULTS = []
 
 
@@ -119,6 +119,8 @@ def run(tgt: str, raw: list | None = None) -> int:
     parts = [BIN, "-u", tgt]
     for flag, value in selected:
         parts.append(flag)
+        if flag == "-kf" and not value:
+            value = "all"
         if value:
             parts.append(value)
     parts += ["-jsonl", "-silent"]
