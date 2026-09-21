@@ -36,6 +36,8 @@ def run() -> int:
         if choice in ("help", ""):
             continue
         if choice == "clean":
+            clear()
+            banner.render()
             clean.run()
             input("\n  enter to return")
             continue
@@ -65,5 +67,7 @@ def _section(key: str) -> None:
         if not rest:
             input(f"  usage: {cmd} <target> [flags] — enter to continue")
             continue
+        clear()
+        banner.render()
         handler(rest[0], rest[1:])
         input("\n  enter to return")
