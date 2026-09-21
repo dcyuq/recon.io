@@ -38,6 +38,7 @@ _SECTIONS = [
 _CORE = [
     ("target <url|ip|host>", "set the current target"),
     ("tools", "show installed tools"),
+    ("clean", "uninstall tools + caches"),
     ("help", "show this menu"),
     ("exit", "quit"),
 ]

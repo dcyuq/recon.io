@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import banner, help as menu
+from reconio import banner, clean, help as menu
 from reconio.network import pscan
 
 
@@ -34,6 +34,10 @@ def run() -> int:
             clear()
             return 0
         if choice in ("help", ""):
+            continue
+        if choice == "clean":
+            clean.run()
+            input("\n  enter to return")
             continue
         key = _SECTIONS.get(choice)
         if key:
