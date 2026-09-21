@@ -1,32 +1,39 @@
 from __future__ import annotations
-import argparse
 import sys
-
-from reconio import banner
-
+ 
+from reconio.bootstrap import bootstrap
+ 
 __version__ = "0.1.0"
-
-def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="recon.io", add_help=False)
-    p.add_argument("target", nargs="?")
-    p.add_argument("-h", "--help", action="store_true",)
-    p.add_argument("-v", "--version", action="store_true",)
-    return p
-
-
-def main(argv: list[str]| None = None) -> int:
-    args = build_parser().parse_args(argv)
-
-    if args.version:
-        print(f"recon.io {__version__}")
+ 
+ 
+def main(argv: list[str] | None = None) -> int:
+    argv = sys.argv[1:] if argv is None else argv
+ 
+    if argv and argv[0] in ("-v", "--version"):
+        print(f"shard recon.io {__version__}")
         return 0
-
-    if args.help or args.target is None: 
+ 
+    bootstrap()
+ 
+    from reconio import banner, help as menu, pscan
+ 
+    if not argv or argv[0] in ("-h", "--help", "help"):
         banner.render()
-        help.render()
+        menu.render()
         return 0
-
-    banner.render()
-
+ 
+    verb, rest = argv[0], argv[1:]
+ 
+    if verb == "pscan":
+        if not rest:
+            print("usage: recon pscan <target> [flags]")
+            return 1
+        return pscan.run(rest[0], rest[1:])
+ 
+    print(f"unknown command: {verb}")
+    return 1
+ 
+ 
 if __name__ == "__main__":
     sys.exit(main())
+ 
