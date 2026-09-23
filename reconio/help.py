@@ -15,23 +15,24 @@ _INTRO = "select a section or command · targets must be authorized"
 _SECTIONS = [
     ("NETWORK", [
         ("pscan", "nmap", True),
-        ("portscan", "masscan/naabu", False),
+        ("portscan", "naabu", True),
     ]),
     ("WEB", [
         ("probe", "httpx", True),
-        ("fingerprint", "whatweb", False),
+        ("fingerprint", "whatweb", True),
         ("fuzz", "ffuf", True),
         ("crawl", "katana", True),
     ]),
     ("OSINT", [
-        ("whois", "whois", False),
-        ("dns", "dnsx", False),
-        ("subs", "subfinder", False),
-        ("crt", "crt.sh", False),
+        ("whois", "whois", True),
+        ("dns", "dnsx", True),
+        ("subs", "subfinder", True),
+        ("crt", "crt.sh", True),
+        ("sherlock", "sherlock", True),
     ]),
     ("TLS", [
-        ("tls", "tlsx", False),
-        ("ssl", "testssl.sh", False),
+        ("tls", "tlsx", True),
+        ("ssl", "testssl.sh", True),
     ]),
 ]
 

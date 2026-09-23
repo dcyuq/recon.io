@@ -24,6 +24,7 @@ APT = {
     "dig": "dnsutils",
     "ffuf": "ffuf",
     "gobuster": "gobuster",
+    "sherlock": "sherlock",
 }
 
 GEM = {

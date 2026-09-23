@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from reconio import banner, clean, help as menu, target
-from reconio.network import pscan
-from reconio.web import probe, crawl, fuzz
+from reconio.network import pscan, portscan
+from reconio.web import probe, crawl, fuzz, fingerprint
+from reconio.osint import subs, dns, whois, crt, sherlock
+from reconio.tls import tls, ssl
 
 
 def clear() -> None:
@@ -32,7 +34,18 @@ _HANDLERS = {
     "probe": probe.run,
     "crawl": crawl.run,
     "fuzz": fuzz.run,
+    "fingerprint": fingerprint.run,
+    "portscan": portscan.run,
+    "subs": subs.run,
+    "dns": dns.run,
+    "whois": whois.run,
+    "crt": crt.run,
+    "tls": tls.run,
+    "ssl": ssl.run,
+    "sherlock": sherlock.run,
 }
+
+_NO_TARGET = {"sherlock"}
 
 
 def _set_target(args) -> None:
@@ -93,7 +106,7 @@ def _section(key: str) -> None:
             input(f"  not available yet: {cmd} — enter to continue")
             continue
         tokens = list(rest)
-        if not any(target.looks_like_target(t) for t in tokens):
+        if cmd not in _NO_TARGET and not any(target.looks_like_target(t) for t in tokens):
             cur = target.get()
             if cur and (cur.ip or cur.host):
                 tokens.append(cur.ip or cur.host)

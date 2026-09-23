@@ -42,6 +42,32 @@ FLAGS = {
         ("-e", "exts", "extensions (e.g. .php,.txt)"),
         ("-ac", None, "auto-calibrate filtering"),
     ],
+    "fingerprint": [
+        ("-a", "level", "aggression level 1-4"),
+    ],
+    "portscan": [
+        ("-p", "ports", "ports (e.g. 1-1000 or 80,443)"),
+        ("-top-ports", "n", "scan top N ports"),
+        ("-rate", "pps", "packets per second"),
+    ],
+    "subs": [
+        ("-recursive", None, "recursive enumeration"),
+        ("-timeout", "s", "per-source timeout"),
+    ],
+    "dns": [
+        ("-a", None, "A records"),
+        ("-cname", None, "CNAME records"),
+        ("-mx", None, "MX records"),
+        ("-txt", None, "TXT records"),
+    ],
+    "tls": [
+        ("-san", None, "show subject alt names"),
+        ("-expired", None, "flag expired certs"),
+    ],
+    "sherlock": [
+        ("-all", None, "show all sites, not just found"),
+        ("-timeout", "s", "request timeout"),
+    ],
 }
 
 BINARY = {
@@ -49,6 +75,14 @@ BINARY = {
     "probe": "httpx",
     "crawl": "katana",
     "fuzz": "ffuf",
+    "fingerprint": "whatweb",
+    "portscan": "naabu",
+    "subs": "subfinder",
+    "dns": "dnsx",
+    "whois": "whois",
+    "tls": "tlsx",
+    "ssl": "testssl.sh",
+    "sherlock": "sherlock",
 }
 
 
