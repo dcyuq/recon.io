@@ -20,8 +20,13 @@ class Target:
 _current: Target | None = None
 
 
+_SINGLE = re.compile(r"^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$")
+
+
 def looks_like_target(tok: str) -> bool:
-    return bool(_IP.match(tok) or _HOST.match(tok))
+    if tok == "localhost":
+        return True
+    return bool(_IP.match(tok) or _HOST.match(tok) or _SINGLE.match(tok))
 
 
 def parse(raw: str) -> str:
