@@ -4,6 +4,8 @@ import socket
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
+from reconio import report
+
 _IP = re.compile(r"^\d{1,3}(\.\d{1,3}){3}$")
 _HOST = re.compile(r"^(?=.{1,253}$)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,}$")
 _PROBE_PORTS = (80, 443, 22, 445, 3389)
@@ -65,6 +67,7 @@ def set_target(raw: str) -> Target:
     ip = resolve(host)
     ok = reachable(ip) if ip else False
     _current = Target(raw=raw, host=host, ip=ip, reachable=ok)
+    report.set_target(host or ip or raw)
     return _current
 
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 
-from reconio import flags, runner, target
+from reconio import flags, runner, target, report
 
 try:
     from rich.console import Console
@@ -137,6 +137,7 @@ def run(tgt: str, raw: list | None = None) -> int:
         print(out)
         return code
     rows = _parse(out)
+    report.record(VERB, "web", ["URL", "CODE", "TITLE", "TECH"], rows)
     if not rows and out.strip():
         print(out)
         return code

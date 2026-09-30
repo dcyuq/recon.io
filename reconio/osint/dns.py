@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 
-from reconio import common, flags, runner, target
+from reconio import common, flags, runner, target, report
 
 VERB = "dns"
 BIN = flags.BINARY[VERB]
@@ -48,4 +48,5 @@ def run(tgt, raw=None):
         print(out)
         return code
     common.table(["HOST", "A", "CNAME", "MX"], rows, "no records")
+    report.record(VERB, "osint", ["HOST", "A", "CNAME", "MX"], rows)
     return code

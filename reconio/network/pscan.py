@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 import xml.etree.ElementTree as ET
 
-from reconio import flags, runner, target
+from reconio import flags, runner, target, report
 
 try:
     from rich.console import Console
@@ -147,4 +147,5 @@ def run(tgt: str, raw: list[str] | None = None) -> int:
         print(out)
         return code
     _render(tgt, up, rows)
+    report.record(VERB, "network", ["PORT", "PROTO", "SERVICE", "VERSION"], rows, {"up": up})
     return code

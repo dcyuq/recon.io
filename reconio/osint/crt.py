@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import common, target
+from reconio import common, target, report
 
 try:
     import requests
@@ -38,4 +38,5 @@ def run(tgt, raw=None):
                 names.add(n)
     rows = [(n,) for n in sorted(names)]
     common.table(["SUBDOMAIN"], rows, "no certs found")
+    report.record(VERB, "osint", ["SUBDOMAIN"], rows)
     return 0

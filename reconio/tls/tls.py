@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 
-from reconio import common, flags, runner, target
+from reconio import common, flags, runner, target, report
 
 VERB = "tls"
 BIN = flags.BINARY[VERB]
@@ -47,4 +47,5 @@ def run(tgt, raw=None):
         print(out)
         return code
     common.table(["HOST", "CN", "ISSUER", "EXPIRES"], rows, "no tls data")
+    report.record(VERB, "tls", ["HOST", "CN", "ISSUER", "EXPIRES"], rows)
     return code

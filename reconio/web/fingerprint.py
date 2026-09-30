@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 import tempfile
 
-from reconio import common, flags, runner, target
+from reconio import common, flags, runner, target, report
 
 VERB = "fingerprint"
 BIN = flags.BINARY[VERB]
@@ -49,4 +49,5 @@ def run(tgt, raw=None):
         print(out)
         return code
     common.table(["TARGET", "STATUS", "TECH"], rows, "no fingerprint")
+    report.record(VERB, "web", ["TARGET", "STATUS", "TECH"], rows)
     return code

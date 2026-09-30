@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import common, flags, runner, target
+from reconio import common, flags, runner, target, report
 
 VERB = "ssl"
 BIN = flags.BINARY[VERB]
@@ -22,4 +22,6 @@ def run(tgt, raw=None):
     print("  note: testssl is thorough and slow, this may take a while")
     code, out = runner.run_with_loader(cmd, f"scanning tls/ssl on {host}")
     print(out)
+    rows = [(ln,) for ln in out.splitlines() if ln.strip()]
+    report.record(VERB, "tls", ["OUTPUT"], rows)
     return code

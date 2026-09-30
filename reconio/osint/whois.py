@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import common, flags, runner, target
+from reconio import common, flags, runner, target, report
 
 VERB = "whois"
 BIN = flags.BINARY[VERB]
@@ -45,4 +45,5 @@ def run(tgt, raw=None):
         print(out)
         return code
     common.table(["FIELD", "VALUE"], rows, "no whois data")
+    report.record(VERB, "osint", ["FIELD", "VALUE"], rows)
     return code

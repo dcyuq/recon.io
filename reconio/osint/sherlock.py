@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import common, flags, runner
+from reconio import common, flags, runner, report
 
 VERB = "sherlock"
 BIN = flags.BINARY[VERB]
@@ -69,4 +69,5 @@ def run(uname, raw=None):
         print(out)
         return code
     common.table(["SITE", "URL", "STATUS"], rows, "no accounts found")
+    report.record(VERB, "osint", ["SITE", "URL", "STATUS"], rows, {"username": uname})
     return code

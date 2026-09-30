@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 
-from reconio import common, flags, runner, target
+from reconio import common, flags, runner, target, report
 
 VERB = "portscan"
 BIN = flags.BINARY[VERB]
@@ -45,4 +45,5 @@ def run(tgt, raw=None):
         print(out)
         return code
     common.table(["IP", "PORTS"], rows, "no open ports")
+    report.record(VERB, "network", ["IP", "PORTS"], rows)
     return code

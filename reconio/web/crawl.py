@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 
-from reconio import flags, runner, target
+from reconio import flags, runner, target, report
 
 try:
     from rich.console import Console
@@ -127,6 +127,7 @@ def run(tgt: str, raw: list | None = None) -> int:
     code, out = runner.run_with_loader(" ".join(parts), f"crawling {tgt}")
 
     rows = _parse(out)
+    report.record(VERB, "web", ["URL", "STATUS", "TYPE"], rows)
     if not rows and out.strip():
         print(out)
         return code

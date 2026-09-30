@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import banner, clean, help as menu, target
+from reconio import banner, clean, help as menu, target, report
 from reconio.network import pscan, portscan
 from reconio.web import probe, crawl, fuzz, fingerprint
 from reconio.osint import subs, dns, whois, crt, sherlock
@@ -60,6 +60,14 @@ def _set_target(args) -> None:
         input(f"  target set: {t.ip} ({t.host}) [{tag}] — enter to continue")
 
 
+def _report() -> None:
+    j, h = report.flush()
+    if not j:
+        input("  nothing to report yet — enter to continue")
+        return
+    input(f"  saved {j} and {h} — enter to continue")
+
+
 def run() -> int:
     while True:
         _show(menu.render)
@@ -72,6 +80,9 @@ def run() -> int:
             continue
         if first == "target":
             _set_target(choice.split()[1:])
+            continue
+        if choice == "report":
+            _report()
             continue
         if choice == "clean":
             clear()
@@ -100,6 +111,9 @@ def _section(key: str) -> None:
         cmd, rest = parts[0], parts[1:]
         if cmd == "target":
             _set_target(rest)
+            continue
+        if cmd == "report":
+            _report()
             continue
         handler = _HANDLERS.get(cmd)
         if not handler:

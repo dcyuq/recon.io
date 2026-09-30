@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import common, flags, runner, target
+from reconio import common, flags, runner, target, report
 
 VERB = "subs"
 BIN = flags.BINARY[VERB]
@@ -37,4 +37,5 @@ def run(tgt, raw=None):
         print(out)
         return code
     common.table(["SUBDOMAIN"], rows, "no subdomains found")
+    report.record(VERB, "osint", ["SUBDOMAIN"], rows)
     return code
