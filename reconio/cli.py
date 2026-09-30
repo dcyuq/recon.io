@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from reconio import banner, clean, help as menu, target, report
+from reconio import banner, clean, help as menu, target, report, auto
 from reconio.network import pscan, portscan
 from reconio.web import probe, crawl, fuzz, fingerprint
 from reconio.osint import subs, dns, whois, crt, sherlock
@@ -68,6 +68,20 @@ def _report() -> None:
     input(f"  saved {j} and {h} — enter to continue")
 
 
+def _auto(args) -> None:
+    tgt = args[0] if args else None
+    if not tgt:
+        cur = target.get()
+        tgt = (cur.ip or cur.host) if cur else None
+    if not tgt:
+        input("  no target — set one or pass it: auto <target> — enter to continue")
+        return
+    clear()
+    banner.render()
+    auto.run(tgt, args[1:] if len(args) > 1 else None)
+    input("\n  enter to return")
+
+
 def run() -> int:
     while True:
         _show(menu.render)
@@ -83,6 +97,9 @@ def run() -> int:
             continue
         if choice == "report":
             _report()
+            continue
+        if first == "auto":
+            _auto(choice.split()[1:])
             continue
         if choice == "clean":
             clear()

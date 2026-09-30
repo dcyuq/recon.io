@@ -38,6 +38,8 @@ _SECTIONS = [
 
 _CORE = [
     ("target <url|ip|host>", "set the current target"),
+    ("auto [target]", "full scan: nmap then chain tools by open ports"),
+    ("report", "save findings to output/<target> as json + html"),
     ("tools", "show installed tools"),
     ("clean", "uninstall tools + caches"),
     ("help", "show this menu"),
